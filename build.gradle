@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.25"
+    }
+    
+}
+
+//group 'com.github.sedovalx.sandbox.gradle.aspectj.example'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
+
+mainClassName = "com.be3short.io.logging.IO"
+
+repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+   }
+
+dependencies {
+	compile 'org.slf4j:slf4j-api:1.7.21'
+	testCompile 'junit:junit:4.12'
+	compile group: 'com.jcabi', name: 'jcabi-log', version: '0.17.2'
+    compile "org.aspectj:aspectjrt:1.8.10"
+    compile 'com.jcabi:jcabi-aspects:0.22.3'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+    
+}
+
+jar {
+    archiveName = "LogTools.jar"
+
+    from {
+
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'com.be3short.io.logging.IO'
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
